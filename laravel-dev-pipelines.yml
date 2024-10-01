@@ -1,0 +1,50 @@
+variables:
+- group: myvariable
+
+trigger:
+  - master
+
+pool: default
+
+stages:
+- stage: preparation
+  displayName: Updating library depedencies then build and push docker container
+  jobs:
+  - job: Composer
+    steps:
+    - script: |
+        composer update --prefer-dist --no-ansi --no-interaction --no-progress
+        composer dump-autoload
+        export IMAGE=$CUSTOM_REGISTRY_BASEDN/$BASE_NAMESPACE/$(Build.Repository.Name):adityaaji
+        echo "$CUSTOM_REGISTRY_PASSWORD" | docker login -u "$CUSTOM_REGISTRY_USER" --password-stdin $CUSTOM_REGISTRY_URL
+        docker build -t $IMAGE .
+        docker push $IMAGE
+      
+# - stage: build
+#   displayName: Building container image
+#   jobs:
+#   - job: Docker
+#     steps:
+#     - script: |
+#         export IMAGE=$CUSTOM_REGISTRY_BASEDN/$BASE_NAMESPACE/$(Build.Repository.Name):$(Build.SourceVersion)
+#         echo "$CUSTOM_REGISTRY_PASSWORD" | docker login -u "$CUSTOM_REGISTRY_USER" --password-stdin $CUSTOM_REGISTRY_URL
+#         docker build -t $IMAGE .
+#         docker push $IMAGE
+
+# - stage: deploy
+#   displayName: Deploying into kubernetes cluster
+#   jobs:
+#   - job: Kubernetes
+#     steps:
+#     - script: |
+#         sed -i "s,<IMAGE_NAME>,$CUSTOM_REGISTRY_BASEDN/$BASE_NAMESPACE/$(Build.Repository.Name),g" .kubernetes/deploy.yml
+#         sed -i "s,<IMAGE_VERSION>,$(Build.SourceVersion),g" .kubernetes/deploy.yml
+#         sed -i "s,<PROJECT_NAME>,$(Build.Repository.Name),g" .kubernetes/deploy.yml
+#         sed -i "s,<PROJECT_NAMESPACE>,$BASE_NAMESPACE,g" .kubernetes/deploy.yml
+#         sed -i "s,<OUTPUT_URL>,$(Build.Repository.Name).$BASE_DOMAIN,g" .kubernetes/deploy.yml
+#         sed -i "s,<PROJECT_NAME>,$(Build.Repository.Name),g" .kubernetes/config.yml
+#         sed -i "s,<PROJECT_NAMESPACE>,$BASE_NAMESPACE,g" .kubernetes/config.yml
+#         sed -i "s,<OUTPUT_URL>,$(Build.Repository.Name).$BASE_DOMAIN,g" .kubernetes/config.yml
+#         kubectl apply -f .kubernetes/config.yml
+#         kubectl apply -f .kubernetes/deploy.yml
+#         echo "Application should be accessible at https://$(Build.Repository.Name).$BASE_DOMAIN";

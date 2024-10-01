@@ -1,0 +1,235 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "My API",
+        "description": "This is the API documentation for my application.",
+        "termsOfService": "https://example.com/terms",
+        "contact": {
+            "name": "API Support",
+            "url": "https://example.com/support",
+            "email": "support@example.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/v1/role_kanwil/petugas/role_plh": {
+            "get": {
+                "tags": [
+                    "role_kanwil"
+                ],
+                "summary": "Get all petugas with role PLH",
+                "operationId": "b0ad8fbe1b6ba5f99f62cb6d6f806925",
+                "parameters": [
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "enum": [
+                                5,
+                                10,
+                                25,
+                                50,
+                                100
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PetugasRolePlhResource"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "PetugasRolePlhResource": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "nama": {
+                        "type": "string"
+                    },
+                    "nip": {
+                        "type": "string"
+                    },
+                    "unit_kerja_id": {
+                        "type": "integer"
+                    },
+                    "unit_kerja": {
+                        "$ref": "#/components/schemas/UnitKerjaResource"
+                    },
+                    "group_id": {
+                        "type": "integer"
+                    },
+                    "group": {
+                        "$ref": "#/components/schemas/GroupResource"
+                    },
+                    "exp_sk": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "GroupResource": {
+                "required": [
+                    "code",
+                    "name"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "Unique identifier for the group",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "code": {
+                        "description": "Code of the group",
+                        "type": "string"
+                    },
+                    "name": {
+                        "description": "Name of the group",
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "description": "Timestamp when the record was created",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "description": "Timestamp when the record was last updated",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "UnitKerjaResource": {
+                "required": [
+                    "nama",
+                    "jenis"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "Unique identifier for the unit kerja",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "nama": {
+                        "description": "Name of the unit kerja",
+                        "type": "string"
+                    },
+                    "jenis": {
+                        "description": "Type of the unit kerja",
+                        "type": "string"
+                    },
+                    "parent_id": {
+                        "description": "Parent ID for hierarchical structure",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "bank_id": {
+                        "description": "Associated bank ID",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "nomor_rekening": {
+                        "description": "Bank account number",
+                        "type": "string"
+                    },
+                    "alamat": {
+                        "description": "Address of the unit kerja",
+                        "type": "string"
+                    },
+                    "provinsi_id": {
+                        "description": "Province ID",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "kota_id": {
+                        "description": "City ID",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "telepon": {
+                        "description": "Phone number",
+                        "type": "string"
+                    },
+                    "kode_satker": {
+                        "description": "Satker code",
+                        "type": "string"
+                    },
+                    "kode_risalah": {
+                        "description": "Risalah code",
+                        "type": "string"
+                    },
+                    "kode_unit": {
+                        "description": "Unit code",
+                        "type": "string"
+                    },
+                    "additional_information": {
+                        "description": "Any additional information",
+                        "type": "string"
+                    },
+                    "created_by": {
+                        "description": "ID of the user who created this record",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updated_by": {
+                        "description": "ID of the user who last updated this record",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "created_at": {
+                        "description": "Timestamp when the record was created",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "description": "Timestamp when the record was last updated",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "Bearer": {
+                "type": "http",
+                "description": "Enter your Bearer token in the format **Bearer {token}**",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "role_kanwil",
+            "description": "role_kanwil"
+        }
+    ]
+}

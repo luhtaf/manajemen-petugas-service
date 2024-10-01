@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Repositories;
+
+use App\Models\{{ modelName }};
+
+class {{ repositoryName }}
+{
+    public function getById($id)
+    {
+        return {{ modelName }}::find($id);
+    }
+
+    public function getAll()
+    {
+        return {{ modelName }}::all();
+    }
+
+    // Add more methods as needed
+}

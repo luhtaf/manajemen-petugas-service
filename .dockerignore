@@ -1,0 +1,16 @@
+**/node_modules/
+**/dist
+.git/
+.git
+.gitignore
+npm-debug.log
+.editorconfig
+.coverage
+.coverage.*
+.env
+.aws
+.dockerignore
+.gcloudignore
+.DS_Store
+.vscode/
+.idea/
